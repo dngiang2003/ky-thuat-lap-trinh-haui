@@ -1,113 +1,113 @@
-#include <iostream>
-#include <math.h>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-struct SinhVien {
-	int maSV;
-	string hoTen;
-	int tuoi;
-	float toan, li, hoa;
-	float gpa;
+class NHANVIEN {
+	char HOTEN[30];
+	char CHUCVU[50];
+public:
+	void nhap();
+	void xuat();
 };
 
-void Nhap(SinhVien dsSV[], int n) {
+void NHANVIEN::nhap() {
+	cout << "HO TEN: "; cin.getline(HOTEN, 30);
+	cout << "CHUC VU: "; cin.getline(CHUCVU, 50);
+}
+
+void NHANVIEN::xuat() {
+	cout << setw(15) << "Nhan vien: " << setw(15) << HOTEN
+	<< setw(15) << "Chuc vu: " << setw(15) << CHUCVU << endl;
+}
+
+// lop phong
+class PHONG {
+	char MAPH[10];
+	char TENPH[30];
+	char TENTP[30];
+public:
+	void nhap();
+	void xuat();
+};
+
+void PHONG::nhap() {
+	cout << "Ma phong: "; cin.getline(MAPH, 10);
+	cout << "Ten phong: "; cin.getline(TENPH, 30);
+	cout << "Truong phong: "; cin.getline(TENPH, 30);
+}
+
+void PHONG::xuat() {
+	cout << setw(15) << "Ten phong: " << setw(15) << TENPH
+	<< setw(15) << "Ma phong: " << setw(15) << MAPH << endl;
+	cout << setw(15) << "Truong phong: " << setw(15) << TENTP << endl;
+}
+
+// lops tai san
+class TAISAN {
+	char TENTS[10];
+	int SL;
+	char TINHTRANG[50];
+public:
+	void nhap();
+	void xuat();
+	friend class PHIEU;
+};
+
+void TAISAN::nhap() {
+	cout << "Ten tai san: "; fflush(stdin); cin.getline(TENTS, 30);
+	cout << "So luong: "; cin >> SL;
+	cout << "Tinh trang: "; fflush(stdin); cin.getline(TINHTRANG, 50);
+}
+
+void TAISAN::xuat() {
+	cout << setw(15) << TENTS << setw(15) << SL
+	<< setw(15) << TINHTRANG << setw(15) << endl;
+}
+
+class PHIEU {
+	char MAPH[10];
+	char NGAY[12];
+	NHANVIEN X;
+	PHONG Y;
+	TAISAN* Z;
+	int n;
+public:
+	void nhap();
+	void xuat();
+};
+
+void PHIEU::nhap() {
+	cout << "MA PHIEU: "; cin.getline(MAPH, 10);
+	cout << "NGAY: "": "; cin.getline(NGAY, 12);
+	X.nhap();
+	Y.nhap();
+	cout << "Nhap so tai san N = "; cin >> n;
+	Z = new TAISAN[n];
 	for (int i=0; i<n; i++) {
-		cout << "Nhap sinh vien thu " << i << endl;
-		cout << "Nhap Ma Sv = ";
-		cin >> dsSV[i].maSV;
-		fflush(stdin);
-		cout << "Nhap Ten Sv = ";
-		getline(cin, dsSV[i].hoTen);
-		cout << "Nhap Tuoi Sv = ";
-		cin >> dsSV[i].tuoi;
-		cout << "Nhap diem toan = ";
-		cin >> dsSV[i].toan;
-		cout << "Nhap diem ly = ";
-		cin >> dsSV[i].li;
-		cout << "Nhap hoa = ";
-		cin >> dsSV[i].hoa;
-		dsSV[i].gpa = (dsSV[i].toan+dsSV[i].li+dsSV[i].hoa)/3.0;
+		Z[i].nhap();
 	}
 }
 
-void Sapxep(SinhVien dsSV[], int n) {
-	for (int i=0; i<n-1; i++) {
-		for (int j=i+1; j<n; j++) {
-			if (dsSV[i].tuoi > dsSV[j].tuoi) {
-				SinhVien temp;
-				temp = dsSV[i];
-				dsSV[i] = dsSV[j];
-				dsSV[j] = temp;
-			}
-		}
+void PHIEU::xuat() {
+	cout << setw(40) << "PHIEU KIEM KE TAI SAN" << endl;
+	cout << setw(15) << "Ma phieu: " << setw(15) << MAPH;
+	cout << setw(15) << "Ngay lap: " << setw(15) << NGAY << endl;
+	X.xuat();
+	Y.xuat();
+	cout << setw(15) << "Ten tai san" << setw(15) << "So luong" << setw(15) << "Tinh trang" << endl;
+	for (int i=0; i<n; i++)
+		Z[i].xuat();
+	int T = 0;
+	for (int i=0; i<n; i++) {
+		T += Z[i].SL;
 	}
+	cout << setw(15) << "So tai san: " << n << setw(15) << "Tong so luong: " << T <<  endl;
+	
 }
-
-void Timmax(SinhVien dsSV[], int n) {
-	float max = dsSV[0].gpa;
-	int index = 0;
-	for (int i=1; i<n; i++) {
-		if (dsSV[i].gpa>max) {
-			max = dsSV[i].gpa;
-			index = i;
-		}
-	}
-	cout << "Sinh vien diem trung binh cao nhat la: " << endl;
-	cout << "Ma sinh vien = " << dsSV[index].maSV << endl;
-	cout << "Ten sinh vien = " << dsSV[index].hoTen << endl;
-	cout << "Tuoi sinh vien = " << dsSV[index].tuoi << endl;
-	cout << "Diem trung binh = " << dsSV[index].gpa;
-}
-
-void Xuat(SinhVien dsSV[], int n) {
-	for (int i=0; i<n ; i++) {
-		cout << "Ma sinh vien = " << dsSV[i].maSV << endl;
-		cout << "Ten sinh vien = " << dsSV[i].hoTen << endl;
-		cout << "Tuoi sinh vien = " << dsSV[i].tuoi << endl;
-	}
-}
-
-
-//struct SinhVien {
-//	char hoTen[40];
-//	char maSv[11];
-//	char lop[10];
-//};
-//struct Book {
-//	string title, author;
-//	int pages;
-//	float price;
-//};
 
 int main() {
-	int n;
-	cout << "Nhap so luong SV = ";
-	cin >> n;
-	SinhVien dsSV[n];
-	Nhap(dsSV, n);
-	Sapxep(dsSV, n);
-	Xuat(dsSV, n);
-	cout <<"---------" << endl;
-	Timmax(dsSV, n);
-//	Book a;
-//	cout << "Nhap ten sach: ";
-//	getline(cin, a.title);
-//	cout << "Nhap ten tac gia: ";
-//	getline(cin, a.author);
-//	cout << "Nhap so trang = ";
-//	cin >> a.pages;
-//	cout << "Nhap gia tien = ";
-//	cin >> a.price;
-//	cout <<left<< setw(15) << "Ten sach" << setw(15) <<"Ten tac gia"<<setw(15)<<"So trang";
-//	cout <<left<< setw(15) << a.title << setw(15) <<a.author<<setw(15)<<a.pages;
-//	SinhVien giang;
-//	strcpy(giang.hoTen, "Do Ngoc Giang");
-//	strcpy(giang.maSv, "2021605122");
-//	strcpy(giang.lop, "KTPM-03");
-//	cout << "Ho ten: " << giang.hoTen << endl;
-//	cout << "Ma Sv: " << giang.maSv << endl;
-//	cout << "Lop: " << giang.lop;
+	PHIEU K;
+	K.nhap();
+	K.xuat();
 	return 0;
 }
-
